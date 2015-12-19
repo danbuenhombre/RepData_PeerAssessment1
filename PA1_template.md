@@ -28,7 +28,7 @@
 2. Make a histogram of the total number of steps per day
 
 ```r
-    hist(g$total_steps)
+    hist(g$total_steps, main = "Histogram of Total Steps", xlab = "Total Steps")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
@@ -59,7 +59,7 @@
 ```r
     i <- summarize(i, mean(steps, na.rm=TRUE))
     names(i) <- c("interval","avg_steps")
-    plot(i$interval, i$avg_steps, type="l")
+    plot(i$interval, i$avg_steps, type="l", xlab = "5-min Interval", ylab = "Avg Steps", main = "Avg Steps per Interval")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
@@ -101,7 +101,17 @@
 
 ```r
     n <- d
-    n$steps <- ifelse(is.na(n$steps), i$avg_steps, n$steps)
+    # The single ifelse line seems to work, but I can't quite understand 
+    #    how the proper interval from i is determined
+    #
+    # n$steps <- ifelse(is.na(n$steps), i$avg_steps, n$steps)
+    #
+    # Going with what I can understand :)
+    for (idx in 1:nrow(n)) {
+        if (is.na(n$steps[idx])) {
+            n$steps[idx] <- i[i$interval==n$interval[idx],]$avg_steps
+        } 
+    }
 ```
 
 
@@ -111,7 +121,7 @@
     ng <- group_by(n, date)
     ng <- summarize(ng, sum(steps))
     names(ng) <- c("date", "total_steps")
-    hist(ng$total_steps) 
+    hist(ng$total_steps, main = "Histogram of Total Steps", xlab = "Total Steps") 
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
@@ -152,7 +162,11 @@
     nw <- group_by(n, dowf, interval)
     nw <- summarize(nw, mean(steps))
     names(nw) <- c("dowf","interval","avg_steps")
-    p <- ggplot(nw, aes(x=interval, y=avg_steps)) + geom_line() + facet_wrap(~dowf, ncol=1)
+    p <- ggplot(nw, aes(x=interval, y=avg_steps)) 
+    p <- p + geom_line() 
+    p <- p + facet_wrap(~dowf, ncol=1)
+    p <- p + labs(title="Avg Steps per Interval (Weekday vs Weekend)")
+    p <- p + labs(x = "5-min Interval", y = "Avg Steps")
     print(p)
 ```
 
