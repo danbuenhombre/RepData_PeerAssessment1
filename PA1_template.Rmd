@@ -68,9 +68,9 @@ library(ggplot2)
 2. Devise a strategy for filling in missing values
 
    * For each missing value, use the average for that interval across all days
-
-
-3. Create a new dataset with missing values
+   * Loop through each row of the data frame (n).  If the steps value (n\$steps) is NA, assign the avg steps (i\$avg_steps) from the average per interval data frame (i) for the corresponding interval (i.e. i\$interval[idx]==n\$interval[idx])
+   
+3. Create a new dataset with the imputed values
 ```{r}
     n <- d
     # The single ifelse line seems to work, but I can't quite understand 
@@ -92,7 +92,7 @@ library(ggplot2)
     ng <- group_by(n, date)
     ng <- summarize(ng, sum(steps))
     names(ng) <- c("date", "total_steps")
-    hist(ng$total_steps, main = "Histogram of Total Steps", xlab = "Total Steps") 
+    hist(ng$total_steps, main = "Histogram of Total Steps (Imputed Values)", xlab = "Total Steps") 
 ```    
 
    * Calculate the mean and median using the new dataset.
@@ -105,18 +105,24 @@ library(ggplot2)
    
    
 ### Are there differences in activity patterns between weekdays and weekends?
-1. Create a factor variable indicating weekend vs weekday
+1. Using the dataset with imputed missing values (n), create a factor variable indicating weekend vs weekday
 ```{r}
+    # assign a number for day of week (0=Sunday, 6=Saturday)
     n$dow <- as.POSIXlt(n$date)$wday
+    # For weekdays (dow is 1 through 5), assign a level of TRUE and a label of "weekday"
+    # For weekend days (dow is 0 or 6), assign a level of FALSE and a label of "weekend"
     n$dowf <- factor(n$dow %in% 1:5, levels=c(FALSE,TRUE), labels = c("weekend","weekday"))
 ```
 
 
 2. Make a panel plot containing a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days.
 ```{r}
+    # calculate average steps per interval with 'new' dataset
     nw <- group_by(n, dowf, interval)
     nw <- summarize(nw, mean(steps))
     names(nw) <- c("dowf","interval","avg_steps")
+    
+    # Create a panel plot showing weekend vs weekday
     p <- ggplot(nw, aes(x=interval, y=avg_steps)) 
     p <- p + geom_line() 
     p <- p + facet_wrap(~dowf, ncol=1)
