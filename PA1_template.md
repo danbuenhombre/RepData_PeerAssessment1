@@ -37,20 +37,22 @@
 3. Calculate the mean and median of the total number of steps per day
 
 ```r
-    mean(g$total_steps)
+    ts_mean <- as.data.frame(mean(g$total_steps))
+    names(ts_mean) <- "Mean"
+    ts_median <- as.data.frame(median(g$total_steps))
+    names(ts_median) <- "Median"
+    ts_df <- cbind(ts_mean,ts_median)
+    rownames(ts_df) <- "Total Steps per Day"
+    ts_df <- xtable(ts_df)
+    print(ts_df, type="html")
 ```
 
-```
-## [1] 9354.23
-```
-
-```r
-    median(g$total_steps)
-```
-
-```
-## [1] 10395
-```
+<!-- html table generated in R 3.2.1 by xtable 1.8-0 package -->
+<!-- Sun Dec 20 09:50:34 2015 -->
+<table border=1>
+<tr> <th>  </th> <th> Mean </th> <th> Median </th>  </tr>
+  <tr> <td align="right"> Total Steps per Day </td> <td align="right"> 9354.23 </td> <td align="right"> 10395 </td> </tr>
+   </table>
 
 
 ## What is the average daily activity pattern?
@@ -68,29 +70,39 @@
 2. Which interval has the max number of steps?
 
 ```r
-    subset(i, i$avg_steps==max(i$avg_steps))
+    ts_df <- subset(i, i$avg_steps==max(i$avg_steps))
+    names(ts_df) <- c("Interval", "Avg Steps")
+    rownames(ts_df) <- "Interval with Max Steps"
+    ts_df <- xtable(ts_df)
+    print(ts_df, type="html")
 ```
 
-```
-## Source: local data frame [1 x 2]
-## 
-##   interval avg_steps
-##      (int)     (dbl)
-## 1      835  206.1698
-```
+<!-- html table generated in R 3.2.1 by xtable 1.8-0 package -->
+<!-- Sun Dec 20 09:50:34 2015 -->
+<table border=1>
+<tr> <th>  </th> <th> Interval </th> <th> Avg Steps </th>  </tr>
+  <tr> <td align="right"> Interval with Max Steps </td> <td align="right"> 835 </td> <td align="right"> 206.17 </td> </tr>
+   </table>
 
 
 ### Imputing missing values
 1. Calculate the total number of missing values in the dataset
 
 ```r
-    sum(is.na(d$steps))
+    ts_df <- as.data.frame(sum(is.na(d$steps)))
+    names(ts_df) <- "Count"
+    rownames(ts_df) <- "Total NAs"
+    ts_df <- xtable(ts_df)
+    print(ts_df, type="html")
 ```
 
-```
-## [1] 2304
-```
-
+<!-- html table generated in R 3.2.1 by xtable 1.8-0 package -->
+<!-- Sun Dec 20 09:50:34 2015 -->
+<table border=1>
+<tr> <th>  </th> <th> Count </th>  </tr>
+  <tr> <td align="right"> Total NAs </td> <td align="right"> 2304 </td> </tr>
+   </table>
+###
 
 2. Devise a strategy for filling in missing values
 
@@ -131,20 +143,24 @@
    * The mean and median are higher than the original dataset.  Because there are eight full days with missing values, total steps for that day is the mean for all days and the median ends up being the same as the mean.
 
 ```r
-    mean(ng$total_steps)
+    #mean(ng$total_steps)
+    #median(ng$total_steps)
+    ts_mean <- as.data.frame(mean(ng$total_steps))
+    names(ts_mean) <- "Mean"
+    ts_median <- as.data.frame(median(ng$total_steps))
+    names(ts_median) <- "Median"
+    ts_df <- cbind(ts_mean,ts_median)
+    rownames(ts_df) <- "Total Steps per Day"
+    ts_df <- xtable(ts_df)
+    print(ts_df, type="html")
 ```
 
-```
-## [1] 10766.19
-```
-
-```r
-    median(ng$total_steps)
-```
-
-```
-## [1] 10766.19
-```
+<!-- html table generated in R 3.2.1 by xtable 1.8-0 package -->
+<!-- Sun Dec 20 09:50:34 2015 -->
+<table border=1>
+<tr> <th>  </th> <th> Mean </th> <th> Median </th>  </tr>
+  <tr> <td align="right"> Total Steps per Day </td> <td align="right"> 10766.19 </td> <td align="right"> 10766.19 </td> </tr>
+   </table>
    
    
 ### Are there differences in activity patterns between weekdays and weekends?

@@ -7,6 +7,7 @@ output:
 ```{r, echo=F, message=F, warning=F}
 library(dplyr)
 library(ggplot2)
+library(xtable)
 ```
 
 ### Loading and preprocessing the data
@@ -37,9 +38,15 @@ library(ggplot2)
 
 
 3. Calculate the mean and median of the total number of steps per day
-```{r}
-    mean(g$total_steps)
-    median(g$total_steps)
+```{r results='asis'}
+    ts_mean <- as.data.frame(mean(g$total_steps))
+    names(ts_mean) <- "Mean"
+    ts_median <- as.data.frame(median(g$total_steps))
+    names(ts_median) <- "Median"
+    ts_df <- cbind(ts_mean,ts_median)
+    rownames(ts_df) <- "Total Steps per Day"
+    ts_df <- xtable(ts_df)
+    print(ts_df, type="html")
 ```
 
 
@@ -53,17 +60,25 @@ library(ggplot2)
 
 
 2. Which interval has the max number of steps?
-```{r}
-    subset(i, i$avg_steps==max(i$avg_steps))
+```{r results='asis'}
+    ts_df <- subset(i, i$avg_steps==max(i$avg_steps))
+    names(ts_df) <- c("Interval", "Avg Steps")
+    rownames(ts_df) <- "Interval with Max Steps"
+    ts_df <- xtable(ts_df)
+    print(ts_df, type="html")
 ```
 
 
 ### Imputing missing values
 1. Calculate the total number of missing values in the dataset
-```{r}
-    sum(is.na(d$steps))
+```{r results='asis'}
+    ts_df <- as.data.frame(sum(is.na(d$steps)))
+    names(ts_df) <- "Count"
+    rownames(ts_df) <- "Total NAs"
+    ts_df <- xtable(ts_df)
+    print(ts_df, type="html")
 ```    
-
+###
 
 2. Devise a strategy for filling in missing values
 
@@ -98,9 +113,17 @@ library(ggplot2)
    * Calculate the mean and median using the new dataset.
    
    * The mean and median are higher than the original dataset.  Because there are eight full days with missing values, total steps for that day is the mean for all days and the median ends up being the same as the mean.
-```{r}
-    mean(ng$total_steps)
-    median(ng$total_steps)
+```{r results='asis'}
+    #mean(ng$total_steps)
+    #median(ng$total_steps)
+    ts_mean <- as.data.frame(mean(ng$total_steps))
+    names(ts_mean) <- "Mean"
+    ts_median <- as.data.frame(median(ng$total_steps))
+    names(ts_median) <- "Median"
+    ts_df <- cbind(ts_mean,ts_median)
+    rownames(ts_df) <- "Total Steps per Day"
+    ts_df <- xtable(ts_df)
+    print(ts_df, type="html")
 ```    
    
    

@@ -91,10 +91,39 @@ img {
 <ol start="3" style="list-style-type: decimal">
 <li>Calculate the mean and median of the total number of steps per day</li>
 </ol>
-<pre class="r"><code>    mean(g$total_steps)</code></pre>
-<pre><code>## [1] 9354.23</code></pre>
-<pre class="r"><code>    median(g$total_steps)</code></pre>
-<pre><code>## [1] 10395</code></pre>
+<pre class="r"><code>    ts_mean &lt;- as.data.frame(mean(g$total_steps))
+    names(ts_mean) &lt;- &quot;Mean&quot;
+    ts_median &lt;- as.data.frame(median(g$total_steps))
+    names(ts_median) &lt;- &quot;Median&quot;
+    ts_df &lt;- cbind(ts_mean,ts_median)
+    rownames(ts_df) &lt;- &quot;Total Steps per Day&quot;
+    ts_df &lt;- xtable(ts_df)
+    print(ts_df, type=&quot;html&quot;)</code></pre>
+<!-- html table generated in R 3.2.1 by xtable 1.8-0 package -->
+<!-- Sun Dec 20 09:50:34 2015 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Mean
+</th>
+<th>
+Median
+</th>
+</tr>
+<tr>
+<td align="right">
+Total Steps per Day
+</td>
+<td align="right">
+9354.23
+</td>
+<td align="right">
+10395
+</td>
+</tr>
+</table>
 </div>
 <div id="what-is-the-average-daily-activity-pattern" class="section level2">
 <h2>What is the average daily activity pattern?</h2>
@@ -108,19 +137,68 @@ img {
 <ol start="2" style="list-style-type: decimal">
 <li>Which interval has the max number of steps?</li>
 </ol>
-<pre class="r"><code>    subset(i, i$avg_steps==max(i$avg_steps))</code></pre>
-<pre><code>## Source: local data frame [1 x 2]
-## 
-##   interval avg_steps
-##      (int)     (dbl)
-## 1      835  206.1698</code></pre>
+<pre class="r"><code>    ts_df &lt;- subset(i, i$avg_steps==max(i$avg_steps))
+    names(ts_df) &lt;- c(&quot;Interval&quot;, &quot;Avg Steps&quot;)
+    rownames(ts_df) &lt;- &quot;Interval with Max Steps&quot;
+    ts_df &lt;- xtable(ts_df)
+    print(ts_df, type=&quot;html&quot;)</code></pre>
+<!-- html table generated in R 3.2.1 by xtable 1.8-0 package -->
+<!-- Sun Dec 20 09:50:34 2015 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Interval
+</th>
+<th>
+Avg Steps
+</th>
+</tr>
+<tr>
+<td align="right">
+Interval with Max Steps
+</td>
+<td align="right">
+835
+</td>
+<td align="right">
+206.17
+</td>
+</tr>
+</table>
 <div id="imputing-missing-values" class="section level3">
 <h3>Imputing missing values</h3>
 <ol style="list-style-type: decimal">
 <li>Calculate the total number of missing values in the dataset</li>
 </ol>
-<pre class="r"><code>    sum(is.na(d$steps))</code></pre>
-<pre><code>## [1] 2304</code></pre>
+<pre class="r"><code>    ts_df &lt;- as.data.frame(sum(is.na(d$steps)))
+    names(ts_df) &lt;- &quot;Count&quot;
+    rownames(ts_df) &lt;- &quot;Total NAs&quot;
+    ts_df &lt;- xtable(ts_df)
+    print(ts_df, type=&quot;html&quot;)</code></pre>
+<!-- html table generated in R 3.2.1 by xtable 1.8-0 package -->
+<!-- Sun Dec 20 09:50:34 2015 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Count
+</th>
+</tr>
+<tr>
+<td align="right">
+Total NAs
+</td>
+<td align="right">
+2304
+</td>
+</tr>
+</table>
+</div>
+<div id="section" class="section level3">
+<h3></h3>
 <ol start="2" style="list-style-type: decimal">
 <li>Devise a strategy for filling in missing values</li>
 </ol>
@@ -155,10 +233,41 @@ img {
 <li><p>Calculate the mean and median using the new dataset.</p></li>
 <li><p>The mean and median are higher than the original dataset. Because there are eight full days with missing values, total steps for that day is the mean for all days and the median ends up being the same as the mean.</p></li>
 </ul>
-<pre class="r"><code>    mean(ng$total_steps)</code></pre>
-<pre><code>## [1] 10766.19</code></pre>
-<pre class="r"><code>    median(ng$total_steps)</code></pre>
-<pre><code>## [1] 10766.19</code></pre>
+<pre class="r"><code>    #mean(ng$total_steps)
+    #median(ng$total_steps)
+    ts_mean &lt;- as.data.frame(mean(ng$total_steps))
+    names(ts_mean) &lt;- &quot;Mean&quot;
+    ts_median &lt;- as.data.frame(median(ng$total_steps))
+    names(ts_median) &lt;- &quot;Median&quot;
+    ts_df &lt;- cbind(ts_mean,ts_median)
+    rownames(ts_df) &lt;- &quot;Total Steps per Day&quot;
+    ts_df &lt;- xtable(ts_df)
+    print(ts_df, type=&quot;html&quot;)</code></pre>
+<!-- html table generated in R 3.2.1 by xtable 1.8-0 package -->
+<!-- Sun Dec 20 09:50:34 2015 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Mean
+</th>
+<th>
+Median
+</th>
+</tr>
+<tr>
+<td align="right">
+Total Steps per Day
+</td>
+<td align="right">
+10766.19
+</td>
+<td align="right">
+10766.19
+</td>
+</tr>
+</table>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level3">
 <h3>Are there differences in activity patterns between weekdays and weekends?</h3>
